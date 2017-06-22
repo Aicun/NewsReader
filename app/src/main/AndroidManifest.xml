@@ -3,6 +3,7 @@
     package="lac.com.newsreader">
 
     <application
+        android:name=".NewsReaderApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,6 +18,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ItemActivity"></activity>
+        <service android:name=".NewsReaderService"
+            android:exported="false"/>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 </manifest>
