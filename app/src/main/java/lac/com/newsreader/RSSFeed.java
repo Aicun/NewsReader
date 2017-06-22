@@ -16,6 +16,8 @@ public class RSSFeed {
 
     private SimpleDateFormat dateInFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss Z");
 
+    public final static String NEW_FEED = "lac.com.newsreader.NEW_FEED";
+
     public RSSFeed() {
         items = new ArrayList<>();
     }

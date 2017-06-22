@@ -67,6 +67,10 @@ public class NewsReaderService extends Service {
 
                     app.setFeedMillis(feed.getPubDateMillis());
                     sendNotification("Select to view new feed");
+
+                    Intent intent = new Intent(RSSFeed.NEW_FEED);
+                    intent.putExtra("test", "test broadcast");
+                    sendBroadcast(intent);
                 } else {
                     Log.d("News Reader", "No new feed");
                 }
@@ -87,6 +91,10 @@ public class NewsReaderService extends Service {
     private void sendNotification(String text) {
         // create the intent for the notification
         Intent notificationIntent = new Intent(this, ItemActivity.class);
+        notificationIntent.putExtra("pubdate", "2017-09-22");
+        notificationIntent.putExtra("title", "Goole IO updated");
+        notificationIntent.putExtra("description", "Hello Google");
+        notificationIntent.putExtra("link", "http://www.google.ca");
 
         //create pending intent
         int flag = PendingIntent.FLAG_UPDATE_CURRENT;

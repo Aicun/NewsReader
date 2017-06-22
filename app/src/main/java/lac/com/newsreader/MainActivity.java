@@ -1,6 +1,9 @@
 package lac.com.newsreader;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private TextView titleTextView;
     private ListView itemsListView;
 
+    private NewFeedReceiver newFeedReceiver;
+    private IntentFilter newFeedFilter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         titleTextView = (TextView) findViewById(R.id.titleTextView);
         itemsListView = (ListView) findViewById(R.id.itemsListView);
+
+        newFeedReceiver = new NewFeedReceiver();
+        newFeedFilter = new IntentFilter(RSSFeed.NEW_FEED);
 
         itemsListView.setOnItemClickListener(this);
 
@@ -52,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onResume() {
         super.onResume();
         feedPubDateMillis = app.getFeedMillis();
+        registerReceiver(newFeedReceiver,newFeedFilter);
 
         if (feedPubDateMillis == -1) {
             new DownloadFeed().execute();
@@ -60,6 +70,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         } else {
             updateDisplay();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(newFeedReceiver);
+        super.onPause();
     }
 
     @Override
@@ -143,6 +159,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             Log.d("News Reader", "Feed read");
             app.setFeedMillis(feed.getPubDateMillis());
             MainActivity.this.updateDisplay();
+        }
+    }
+
+    class NewFeedReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d("News Reader", "new custom broadcast received");
+
+            String test = intent.getStringExtra("test");
+            Log.d("News Reader", "test: " + test);
+            updateDisplay();
         }
     }
 }
